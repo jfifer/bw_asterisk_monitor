@@ -1,0 +1,129 @@
+<html>
+  <head>
+    <title>Broadworks/Asterisk Total Seats</title>
+
+    <style>
+    i { font-style: none; }
+    .output { font-size: 8em; }
+    .smaller-output { font-size: 3em; }
+    </style>
+    <script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+       function go() {
+          $.ajax({
+            url: 'model.php',
+            success: function(res) {
+               result = JSON.parse(res);
+               $('#ast_ext').html(result.asterisk);
+               $('#bw_ext').html(result.broadworks);
+               $('#ez_count').html(result.ezTax);
+               //$('#registered').html(result.mobile.registered.count);
+               //$('#mobile_ytd').html(result.mobile.unique_users_year_to_date);
+               //$('#mobile_qtd').html(result.mobile.unique_users_quarter_to_date);
+               //$('#mobile_mtd').html(result.mobile.unique_users_month_to_date);
+               $('#lastReportDate').html("Last Report: "+result.mobile.lastReport);
+               $('#iosReg').html(result.mobile.ios.count);
+               $('#androidReg').html(result.mobile.android.count);
+               $('#androidAct').html(result.mobile.activeAndroid.count);
+               $('#iOSAct').html(result.mobile.activeIOS.count);
+               $('#totalReg').html(parseInt(result.mobile.ios.count)+parseInt(result.mobile.android.count));
+               $('#totalActive').html(parseInt(result.mobile.activeIOS.count)+parseInt(result.mobile.activeAndroid.count));
+            }
+          });
+
+       }
+
+       $(document).ready(function() {
+          go();
+          setInterval(go, 30000);
+       });
+    </script>
+  </head>
+  <body>
+     <div class="container">
+        <div class="row">
+           <div class="col-md-6">
+             <div class="panel panel-default">
+               <div class="panel-heading">
+                 <h2>Asterisk Extensions</h2>
+               </div>
+               <div class="panel-body asterisk" style="text-align:center;">
+                 <div class="output" id="ast_ext"></div>
+               </div>
+               <div class="footer">
+
+               </div>
+             </div>
+           </div>
+           <div class="col-md-6">
+             <div class="panel panel-default">
+               <div class="panel-heading">
+                 <h2>Broadworks Extensions</h2>
+               </div>
+               <div class="panel-body" style="text-align:center;">
+                   <div class="output" id="bw_ext"></div>
+               </div>
+               <div class="footer">
+
+               </div>
+             </div>
+           </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                 <h2>Tax Automation</h2>
+              </div>
+              <div class="panel-body" style="text-align:center;">
+                <div class="output" id="ez_count"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2>Mobile Users</h2>
+                <!--<span id="lastReportDate">Last Report: </span> -->
+              </div>
+              <div class="panel-body" style="text-align:center;">
+                <table style="width:100%;text-align:center;font-size:2.5em;">
+                  <tr style="background: #ccc;">
+                     <th></th>
+                     <th>Android</th>
+                     <th>iOS</th>
+                     <th>Total</th>
+                  </tr>
+                  <tr>
+                     <td>Registered</td>
+                     <td align=left id='androidReg'></td>
+                     <td align=left id='iosReg'></td>
+                     <td align=left id='totalReg'></td>
+                  </tr>
+                  <tr>
+                     <td>Active</td>
+                     <td align=left id='androidAct'></td>
+                     <td align=left id='iOSAct'></td>
+                     <td align=left id='totalActive'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+     </div>
+  </body>
+</html>
